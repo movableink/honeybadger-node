@@ -1,7 +1,7 @@
 var chai = require("chai");
 var sinon = require("sinon");
 var expect = chai.expect;
-var badger = require("../lib/honeybadger_node");
+var badger = require("../honeybadger_node");
 
 var request = require ('request');
 
