@@ -1,0 +1,21 @@
+{
+  "name": "fake-honeybadger",
+  "description": "Server-side notify() call to honeybadger.io's REST API",
+  "keywords": ["honeybadger", "exceptions"],
+  "repository": {"type" : "git", "url" : "http://github.com/jmontrose/fake-honeybadger.git"},
+  "license" : "MIT",
+  "author": "Jesse Montrose <jesse@ninth.org>",
+  "version": "0.0.1",
+  "dependencies": {
+    "request":"2.27.0"
+  },
+  "devDependencies": {
+    "sinon": "1.7.3",
+    "chai": "1.8.1"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  }
+}
+
