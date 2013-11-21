@@ -6,6 +6,7 @@
   "license" : "MIT",
   "author": "Jesse Montrose <jesse@ninth.org>",
   "version": "0.0.1",
+  "main": "fake-honeybadger",
   "dependencies": {
     "request":"2.27.0"
   },
