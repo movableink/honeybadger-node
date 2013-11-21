@@ -33,10 +33,10 @@ exports.errorPackage = function (data) {
         }
       ],
       "class": "RuntimeError",
-      "message": data.message
+      "message": data.message || 'Default message'
     },
     "request":{
-      "url": data.url,
+      "url": data.url || 'http://localhost',
       "component":"component",
       "action":"action",
       "params":{"_method":"post"},
