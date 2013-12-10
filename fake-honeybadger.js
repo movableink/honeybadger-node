@@ -5,6 +5,9 @@ var HONEYBADGER_API_KEY = process.env.HONEYBADGER_API_KEY;
 
 exports.notify = function(data) {
   console.log("Exception: " + data.message);
+  if (!HONEYBADGER_API_KEY) {
+    return;
+  }
   var requestOptions = {
       url:'https://api.honeybadger.io/v1/notices',
       headers:{
