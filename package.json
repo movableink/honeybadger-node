@@ -6,7 +6,10 @@
   "license" : "MIT",
   "author": "Jesse Montrose <jesse@ninth.org>",
   "version": "0.0.2",
-  "main": "fake-honeybadger",
+  "main": "index",
+  "scripts": {
+    "test": "node_modules/.bin/mocha test/test.js"
+  },
   "dependencies": {
     "request":"2.27.0",
     "parsetrace": "0.1.5"
