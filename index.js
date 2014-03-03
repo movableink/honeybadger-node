@@ -18,6 +18,8 @@ exports.configure = function(c) {
 };
 
 exports.notifyError = function(err, data) {
+  data = data || {};
+
   for(var k in data) {
     if(data.hasOwnKey(k)) {
       err[k] = data[k];
@@ -26,10 +28,10 @@ exports.notifyError = function(err, data) {
 
   var trace = parsetrace(err).object();
   if(trace.frames) {
-    data.backtrace = [];
-    for(var i = 0; i < trace.frames; i++) {
+    err.backtrace = [];
+    for(var i = 0; i < trace.frames.length; i++) {
       var frame = trace.frames[i];
-      data.backtrace.push({
+      err.backtrace.push({
         method: frame['function'],
         number: frame.line,
         file:   frame.file
@@ -37,12 +39,10 @@ exports.notifyError = function(err, data) {
     }
   }
 
-  exports.notify(data);
+  exports.notify(err);
 };
 
 exports.notify = function(data) {
-  console.log("Exception: " + data.message);
-
   if (!conf.apiKey) { return; }
 
   var requestOptions = {
@@ -64,28 +64,22 @@ exports.notify = function(data) {
 exports.errorPackage = function (data) {
   return {
     "error": {
-      "backtrace": [
-        {
-          "file": "node",
-          "method": "runtime_error",
-          "number": "1"
-        }
-      ],
-      "class": "RuntimeError",
-      "message": data.message || 'Default message'
+      "backtrace": data.backtrace,
+      "class":     data.name,
+      "message":   data.message || 'Default message'
     },
     "request":{
-      "url": data.url || 'http://localhost',
-      "component":"component",
-      "action":"action",
-      "params":{"_method":"post"},
-      "controller":"worker",
-      "session":{}
+      "url":        data.url        || 'http://localhost',
+      "component":  data.component  || 'component',
+      "action":     data.action     || 'action',
+      "params":     data.params     || {},
+      "controller": data.controller || 'worker',
+      "session":    data.session    || {}
     },
     "notifier": {
-      "name": "Node Honeybadger Notifier",
-      "url": "http://github.com/movableink/node-honeybadger",
-      "version": "1.3.0",
+      "name":     "Node Honeybadger Notifier",
+      "url":      "http://github.com/movableink/honeybadger-node",
+      "version":  "1.3.0",
       "language": "javascript"
     },
     "server": {
