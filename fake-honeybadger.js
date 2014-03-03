@@ -1,29 +1,65 @@
-var os = require ('os');
-var request = require ('request');
+var os = require('os');
+var request = require('request');
+var parsetrace = require('parsetrace');
 
-var HONEYBADGER_API_KEY = process.env.HONEYBADGER_API_KEY;
+// defaults
+var conf = {
+  apiKey: process.env.HONEYBADGER_API_KEY,
+  environment: 'development',
+  cwd: process.cwd()
+};
+
+exports.configure = function(c) {
+  for(var key of c) {
+    if(c.hasOwnProperty(key)) {
+      conf[key] = c[key];
+    }
+  }
+};
+
+exports.notifyError = function(err, data) {
+  for(var k of data) {
+    if(data.hasOwnKey(k)) {
+      err[k] = data[k];
+    }
+  }
+
+  var trace = parsetrace(err).object();
+  if(trace.frames) {
+    data.backtrace = [];
+    for(var i = 0; i < trace.frames; i++) {
+      var frame = trace.frames[i];
+      data.backtrace.push({
+        method: frame['function'],
+        number: frame.line,
+        file:   frame.file
+      });
+    }
+  }
+
+  exports.notify(data);
+};
 
 exports.notify = function(data) {
   console.log("Exception: " + data.message);
-  if (!HONEYBADGER_API_KEY) {
-    return;
-  }
+
+  if (!conf.apiKey) { return; }
+
   var requestOptions = {
-      url:'https://api.honeybadger.io/v1/notices',
-      headers:{
-        'content-type':'application/json',
-        'X-API-Key':HONEYBADGER_API_KEY,
-        'Accept':'application/json'
-      },
-      json:exports.errorPackage(data)
+    url: 'https://api.honeybadger.io/v1/notices',
+    headers: {
+      'content-type': 'application/json',
+      'X-API-Key':    conf.apiKey,
+      'Accept':       'application/json'
+    },
+    json: exports.errorPackage(data)
   };
-  request.post(
-    requestOptions,
-    function(e,r,body) {
-      console.log('POST to honeybadger, status=' + r.statusCode + ' message=' + data.message);
-    }
-  );
-}
+
+  request.post(requestOptions, function(e,r,body) {
+    if(e) { console.log("ERROR posting to honeybadger: " + e); }
+    console.log('POST to honeybadger, status=' + r.statusCode + ' message=' + data.message);
+  });
+};
 
 exports.errorPackage = function (data) {
   return {
@@ -48,11 +84,14 @@ exports.errorPackage = function (data) {
     },
     "notifier": {
       "name": "Node Honeybadger Notifier",
-      "url": "github/something",
-      "version": "1.3.0"
+      "url": "http://github.com/movableink/node-honeybadger",
+      "version": "1.3.0",
+      "language": "javascript"
     },
     "server": {
-      "hostname": os.hostname()
+      "project_root":     conf.cwd,
+      "hostname":         os.hostname(),
+      "environment_name": conf.environment
     }
   }
 }
