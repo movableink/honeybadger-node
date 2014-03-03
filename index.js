@@ -10,7 +10,7 @@ var conf = {
 };
 
 exports.configure = function(c) {
-  for(var key of c) {
+  for(var key in c) {
     if(c.hasOwnProperty(key)) {
       conf[key] = c[key];
     }
@@ -18,7 +18,7 @@ exports.configure = function(c) {
 };
 
 exports.notifyError = function(err, data) {
-  for(var k of data) {
+  for(var k in data) {
     if(data.hasOwnKey(k)) {
       err[k] = data[k];
     }

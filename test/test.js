@@ -1,7 +1,7 @@
 var chai = require("chai");
 var sinon = require("sinon");
 var expect = chai.expect;
-var badger = require("../fake-honeybadger");
+var badger = require("../index");
 
 var request = require ('request');
 
