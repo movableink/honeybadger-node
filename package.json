@@ -1,11 +1,11 @@
 {
-  "name": "fake-honeybadger",
+  "name": "honeybadger-node",
   "description": "Server-side notify() call to honeybadger.io's REST API",
   "keywords": ["honeybadger", "exceptions"],
   "repository": {"type" : "git", "url" : "http://github.com/jmontrose/fake-honeybadger.git"},
   "license" : "MIT",
   "author": "Jesse Montrose <jesse@ninth.org>",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index",
   "scripts": {
     "test": "node_modules/.bin/mocha test/test.js"
