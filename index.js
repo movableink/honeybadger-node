@@ -17,7 +17,7 @@ exports.configure = function(c) {
   }
 };
 
-exports.notifyError = function(err, data) {
+exports.notifyError = function(err, data, callback) {
   data = data || {};
 
   for(var k in data) {
@@ -39,10 +39,10 @@ exports.notifyError = function(err, data) {
     }
   }
 
-  exports.notify(err);
+  exports.notify(err, callback);
 };
 
-exports.notify = function(data) {
+exports.notify = function(data, callback) {
   if (!conf.apiKey) { return; }
 
   var requestOptions = {
@@ -58,6 +58,8 @@ exports.notify = function(data) {
   request.post(requestOptions, function(e,r,body) {
     if(e) { console.log("ERROR posting to honeybadger: " + e); }
     console.log('POST to honeybadger, status=' + r.statusCode + ' message=' + data.message);
+
+    callback() if callback
   });
 };
 
