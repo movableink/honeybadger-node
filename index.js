@@ -59,7 +59,7 @@ exports.notify = function(data, callback) {
     if(e) { console.log("ERROR posting to honeybadger: " + e); }
     console.log('POST to honeybadger, status=' + r.statusCode + ' message=' + data.message);
 
-    callback() if callback
+    if(callback) { callback(); }
   });
 };
 
